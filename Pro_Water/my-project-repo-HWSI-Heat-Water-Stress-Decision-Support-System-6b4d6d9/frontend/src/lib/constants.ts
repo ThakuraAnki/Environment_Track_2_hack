@@ -1,4 +1,7 @@
-export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+export const API_BASE_URL = (
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000')
+).replace(/\/$/, '');
 
 export const MAP_DEFAULTS = {
   center: { longitude: 77.1025, latitude: 28.7041 }, // Centered around Delhi NCR

@@ -8,8 +8,12 @@ import type {
   ValidationResult 
 } from './types';
 
+function apiUrl(path: string): string {
+  return `${API_BASE_URL}${path}`;
+}
+
 export async function fetchRiskIndex(extraDays: number = 0): Promise<BlockRisk[]> {
-  const url = new URL(`${API_BASE_URL}/api/v1/blocks/risk-index`);
+  const url = new URL(apiUrl('/api/v1/blocks/risk-index'), window.location.origin);
   if (extraDays > 0) {
     url.searchParams.append('extra_days', extraDays.toString());
   }
@@ -19,7 +23,7 @@ export async function fetchRiskIndex(extraDays: number = 0): Promise<BlockRisk[]
 }
 
 export async function fetchBlockExplanation(blockId: string, extraDays: number = 0): Promise<BlockExplanation> {
-  const url = new URL(`${API_BASE_URL}/api/v1/blocks/${blockId}/explain`);
+  const url = new URL(apiUrl(`/api/v1/blocks/${blockId}/explain`), window.location.origin);
   if (extraDays > 0) {
     url.searchParams.append('extra_days', extraDays.toString());
   }
@@ -29,7 +33,7 @@ export async function fetchBlockExplanation(blockId: string, extraDays: number =
 }
 
 export async function postAllocation(request: AllocationRequest): Promise<AllocationResponse> {
-  const res = await fetch(`${API_BASE_URL}/api/v1/allocate`, {
+  const res = await fetch(apiUrl('/api/v1/allocate'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request),
@@ -39,20 +43,20 @@ export async function postAllocation(request: AllocationRequest): Promise<Alloca
 }
 
 export async function fetchDataStatus(): Promise<DataSource[]> {
-  const res = await fetch(`${API_BASE_URL}/api/v1/data-status`);
+  const res = await fetch(apiUrl('/api/v1/data-status'));
   if (!res.ok) throw new Error('Failed to fetch data status');
   const data = await res.json();
   return Array.isArray(data) ? data : (data.sources || []);
 }
 
 export async function fetchValidation(): Promise<ValidationResult> {
-  const res = await fetch(`${API_BASE_URL}/api/v1/validation`);
+  const res = await fetch(apiUrl('/api/v1/validation'));
   if (!res.ok) throw new Error('Failed to fetch validation data');
   return res.json();
 }
 
 export async function fetchBlockBulletin(blockId: string, extraDays: number = 0): Promise<import('./types').EmergencyBulletin> {
-  const url = new URL(`${API_BASE_URL}/api/v1/blocks/${blockId}/bulletin`);
+  const url = new URL(apiUrl(`/api/v1/blocks/${blockId}/bulletin`), window.location.origin);
   if (extraDays > 0) {
     url.searchParams.append('extra_days', extraDays.toString());
   }
@@ -62,8 +66,7 @@ export async function fetchBlockBulletin(blockId: string, extraDays: number = 0)
 }
 
 export async function fetchAwsStatus(): Promise<import('./types').AwsStatus> {
-  const res = await fetch(`${API_BASE_URL}/api/v1/aws-status`);
+  const res = await fetch(apiUrl('/api/v1/aws-status'));
   if (!res.ok) throw new Error('Failed to fetch AWS status');
   return res.json();
 }
-

@@ -8,7 +8,6 @@ from app.engine.ahp import get_weights_from_config
 from app.models import ValidationResponse
 import app.config as config
 import os
-import json
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -78,11 +77,6 @@ async def startup_event():
         backtest_accuracy=0.85
     )
     
-    # Generate snapshot
-    snapshot_path = os.path.join(os.path.dirname(__file__), "..", "demo_snapshot.json")
-    with open(snapshot_path, "w") as f:
-        json.dump(geojson, f)
-        
     logger.info("Startup complete with live weather & ground truth data.")
 
 app.include_router(risk.router)
